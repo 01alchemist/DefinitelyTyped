@@ -1,6 +1,11 @@
 // Type definitions for Office.js 1.0
 // Project: https://github.com/OfficeDev/office-js
-// Definitions by: OfficeDev <https://github.com/OfficeDev>, Ricky Kirkham <https://github.com/Rick-Kirkham>, Alex Jerabek <https://github.com/AlexJerabek>, Elizabeth Samuel <https://github.com/ElizabethSamuel-MSFT>, Sudhi Ramamurthy <https://github.com/sumurthy>
+// Definitions by: OfficeDev <https://github.com/OfficeDev>,
+//                 Ricky Kirkham <https://github.com/Rick-Kirkham>,
+//                 Alex Jerabek <https://github.com/AlexJerabek>,
+//                 Elizabeth Samuel <https://github.com/ElizabethSamuel-MSFT>,
+//                 Sudhi Ramamurthy <https://github.com/sumurthy>,
+//                 Alison McKay <https://github.com/alison-mk>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.4
 
@@ -526,7 +531,7 @@ declare namespace Office {
         /**
          * Specifies the controls in the tab, such as menu items, buttons, etc.
          */
-        controls?: Control[];
+        controls: Control[];
     }
     /**
      * Represents an individual control or command and the state it should have.
@@ -1119,8 +1124,10 @@ declare namespace Office {
          * Server-side code can use this token to access Microsoft Graph for the add-in's web application by using the
          * {@link https://docs.microsoft.com/azure/active-directory/develop/active-directory-v2-protocols-oauth-on-behalf-of | "on behalf of" OAuth flow}.
          *
+         * @deprecated Use Office.auth.getAccessToken instead.
+         * 
          * **Important**: In Outlook, this API is not supported if the add-in is loaded in an Outlook.com or Gmail mailbox.
-         *
+         * 
          * @remarks
          *
          * **Hosts**: Excel, OneNote, Outlook, PowerPoint, Word
@@ -1140,6 +1147,8 @@ declare namespace Office {
          * Server-side code can use this token to access Microsoft Graph for the add-in's web application by using the
          * {@link https://docs.microsoft.com/azure/active-directory/develop/active-directory-v2-protocols-oauth-on-behalf-of | "on behalf of" OAuth flow}.
          *
+         * @deprecated Use `Office.auth.getAccessToken` instead.
+         * 
          * **Important**: In Outlook, this API is not supported if the add-in is loaded in an Outlook.com or Gmail mailbox.
          *
          * @remarks
@@ -1155,9 +1164,28 @@ declare namespace Office {
          *                   If `AsyncResult.status` is "succeeded", then `AsyncResult.value` is the raw AAD v. 2.0-formatted access token.
          */
         getAccessTokenAsync(callback?: (result: AsyncResult<string>) => void): void;
+        /**
+         * Calls the Azure Active Directory V 2.0 endpoint to get an access token to your add-in's web application. Enables add-ins to identify users.
+         * Server-side code can use this token to access Microsoft Graph for the add-in's web application by using the
+         * {@link https://docs.microsoft.com/azure/active-directory/develop/active-directory-v2-protocols-oauth-on-behalf-of | "on behalf of" OAuth flow}. 
+         * This API requires a single sign-on configuration that bridges the add-in to an Azure application. Office users sign in with Organizational
+         * Accounts and Microsoft Accounts. Microsoft Azure returns tokens intended for both user account types to access resources in the Microsoft Graph.
+         *
+         * @remarks
+         *
+         * **Hosts**: Excel, OneNote, Outlook, PowerPoint, Word
+         * 
+         * **Important**: In Outlook, this API is not supported if the add-in is loaded in an Outlook.com or Gmail mailbox. 
+         *
+         * **Requirement set**: {@link https://docs.microsoft.com/office/dev/add-ins/reference/requirement-sets/identity-api-requirement-sets | IdentityAPI}
+         *
+         * @param options - Optional. Accepts an `AuthOptions` object to define sign-on behaviors.
+         * @returns Promise to the access token.
+         */
+        getAccessToken(options?: AuthOptions): Promise<string>;
     }
     /**
-     * Provides options for the user experience when Office obtains an access token to the add-in from AAD v. 2.0 with the `getAccessTokenAsync` method.
+     * Provides options for the user experience when Office obtains an access token to the add-in from AAD v. 2.0 with the `getAccessToken` method.
      */
     interface AuthOptions {
         /**
@@ -1190,7 +1218,7 @@ declare namespace Office {
          * Causes Office to prompt the user to provide the additional factor when the tenancy being targeted by Microsoft Graph requires multifactor
          * authentication. The string value identifies the type of additional factor that is required. In most cases, you won't know at development
          * time whether the user's tenant requires an additional factor or what the string should be. So this option would be used in a "second try"
-         * call of `getAccessTokenAsync` after Microsoft Graph has sent an error requesting the additional factor and containing the string that should
+         * call of `getAccessToken` after Microsoft Graph has sent an error requesting the additional factor and containing the string that should
          * be used with the `authChallenge` option.
          */
         authChallenge?: string;
@@ -9723,7 +9751,10 @@ declare namespace Office {
         /**
          * Gets the properties of an appointment or message in a shared folder, calendar, or mailbox.
          *
-         * **Note**: This method is not supported in Outlook on Mac, iOS, or Android.
+         * For more information around using this API, see the
+         * {@link https://docs.microsoft.com/office/dev/add-ins/outlook/delegate-access | delegate access} article.
+         *
+         * **Note**: This method is not supported in Outlook on iOS or Android.
          *
          * [Api set: Mailbox 1.8]
          *
@@ -9743,7 +9774,10 @@ declare namespace Office {
         /**
          * Gets the properties of an appointment or message in a shared folder, calendar, or mailbox.
          *
-         * **Note**: This method is not supported in Outlook on Mac, iOS, or Android.
+         * For more information around using this API, see the
+         * {@link https://docs.microsoft.com/office/dev/add-ins/outlook/delegate-access | delegate access} article.
+         *
+         * **Note**: This method is not supported in Outlook on iOS or Android.
          *
          * [Api set: Mailbox 1.8]
          *
@@ -10837,7 +10871,10 @@ declare namespace Office {
         /**
          * Gets the properties of an appointment or message in a shared folder, calendar, or mailbox.
          *
-         * **Note**: This method is not supported in Outlook on Mac, iOS, or Android.
+         * For more information around using this API, see the
+         * {@link https://docs.microsoft.com/office/dev/add-ins/outlook/delegate-access | delegate access} article.
+         *
+         * **Note**: This method is not supported in Outlook on iOS or Android.
          *
          * [Api set: Mailbox 1.8]
          *
@@ -10857,7 +10894,10 @@ declare namespace Office {
         /**
          * Gets the properties of an appointment or message in a shared folder, calendar, or mailbox.
          *
-         * **Note**: This method is not supported in Outlook on Mac, iOS, or Android.
+         * For more information around using this API, see the
+         * {@link https://docs.microsoft.com/office/dev/add-ins/outlook/delegate-access | delegate access} article.
+         *
+         * **Note**: This method is not supported in Outlook on iOS or Android.
          *
          * [Api set: Mailbox 1.8]
          *
@@ -13906,7 +13946,10 @@ declare namespace Office {
         /**
          * Gets the properties of an appointment or message in a shared folder, calendar, or mailbox.
          *
-         * **Note**: This method is not supported in Outlook on Mac, iOS, or Android.
+         * For more information around using this API, see the
+         * {@link https://docs.microsoft.com/office/dev/add-ins/outlook/delegate-access | delegate access} article.
+         *
+         * **Note**: This method is not supported in Outlook on iOS or Android.
          *
          * [Api set: Mailbox 1.8]
          *
@@ -13925,7 +13968,10 @@ declare namespace Office {
         /**
          * Gets the properties of an appointment or message in a shared folder, calendar, or mailbox.
          *
-         * **Note**: This method is not supported in Outlook on Mac, iOS, or Android.
+         * For more information around using this API, see the
+         * {@link https://docs.microsoft.com/office/dev/add-ins/outlook/delegate-access | delegate access} article.
+         *
+         * **Note**: This method is not supported in Outlook on iOS or Android.
          *
          * [Api set: Mailbox 1.8]
          *
@@ -14321,6 +14367,10 @@ declare namespace Office {
         from: EmailAddressDetails;
         /**
          * Gets the internet message identifier for an email message.
+         *
+         * **Important**: In the **Sent Items** folder, the `internetMessageId` may not be available yet on recently sent items. In that case,
+         * consider using {@link https://docs.microsoft.com/office/dev/add-ins/outlook/web-services | Exchange Web Services} to get this
+         * {@link https://docs.microsoft.com/exchange/client-developer/web-service-reference/internetmessageid | property from the server}.
          *
          * @remarks
          *
@@ -14924,7 +14974,10 @@ declare namespace Office {
         /**
          * Gets the properties of an appointment or message in a shared folder, calendar, or mailbox.
          *
-         * **Note**: This method is not supported in Outlook on Mac, iOS, or Android.
+         * For more information around using this API, see the
+         * {@link https://docs.microsoft.com/office/dev/add-ins/outlook/delegate-access | delegate access} article.
+         *
+         * **Note**: This method is not supported in Outlook on iOS or Android.
          *
          * [Api set: Mailbox 1.8]
          *
@@ -14943,7 +14996,10 @@ declare namespace Office {
         /**
          * Gets the properties of an appointment or message in a shared folder, calendar, or mailbox.
          *
-         * **Note**: This method is not supported in Outlook on Mac, iOS, or Android.
+         * For more information around using this API, see the
+         * {@link https://docs.microsoft.com/office/dev/add-ins/outlook/delegate-access | delegate access} article.
+         *
+         * **Note**: This method is not supported in Outlook on iOS or Android.
          *
          * [Api set: Mailbox 1.8]
          *
